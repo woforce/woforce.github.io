@@ -27,9 +27,12 @@ COPY Gemfile ./
 
 
 # Install bundler and dependencies
+RUN gem sources --add https://mirrors.tuna.tsinghua.edu.cn/rubygems/ --remove https://rubygems.org/
+RUN gem sources -l
 RUN gem install connection_pool:2.5.0
 RUN gem install bundler:2.3.26
+RUN bundle config mirror.https://rubygems.org https://mirrors.tuna.tsinghua.edu.cn/rubygems
 RUN bundle install
 
 # Command to serve the Jekyll site
-CMD ["jekyll", "serve", "-H", "0.0.0.0", "-w", "--config", "_config.yml,_config_docker.yml"]
+CMD ["jekyll", "serve", "-H", "0.0.0.0", "-w", "--force_polling", "--config", "_config.yml,_config_docker.yml"]
